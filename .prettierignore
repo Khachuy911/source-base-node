@@ -1,0 +1,12 @@
+*.yaml
+*.yml
+node_modules/
+dist/
+migrations/
+seeders/
+logs/
+.husky/
+*md
+tsconfig.*json
+*.hbs
+services\node-api\src\modules\devices\devices.service.ts

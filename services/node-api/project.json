@@ -1,0 +1,47 @@
+{
+  "name": "node-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "services/node-api/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/rspack:rspack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "outputPath": "dist/services/node-api",
+        "main": "services/node-api/src/main.ts",
+        "tsConfig": "services/node-api/tsconfig.app.json",
+        "rspackConfig": "services/node-api/rspack.config.js"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "development",
+          "sourceMap": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "node-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "node-api:build:development"
+        },
+        "production": {
+          "buildTarget": "node-api:build:production"
+        }
+      }
+    }
+  }
+}
