@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 export async function hashData(data: string, salt?: string): Promise<string> {
   salt = salt ? salt : crypto.randomBytes(16).toString('hex');
