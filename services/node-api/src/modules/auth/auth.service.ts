@@ -12,9 +12,7 @@ import { Request } from 'express';
 import { ResponseResult } from '@lib/common/utils/response-result';
 import { User } from '@lib/common/entities/user/user.entity';
 import { compareHash, hashData } from '@lib/common/utils/hash';
-import { MessageUtils } from 'services/node-api/src/shared/messages/messages.utils';
 import { ErrorMessageFields } from 'services/node-api/src/shared/messages/messages.enum';
-import { LanguageCode } from '@lib/common/enum/language-code.enum';
 import { RolesRepository } from '../roles/roles.repository';
 import { RedisHash } from '@lib/common/services/redis/redis-hash';
 
@@ -85,13 +83,13 @@ export class AuthService {
     return ResponseResult.success(result);
   }
 
-  private async validatePassword(password: string, userInfo: User, language?: LanguageCode) {
+  private async validatePassword(password: string, userInfo: User) {
     const { password: currPass, id: userId } = userInfo;
 
     if (!(await compareHash(password, currPass))) {
       this.logger.error(`Username or Password is incorrect. Please check again.`);
       throw new UnauthorizedException(
-        MessageUtils.CreateMessage(ErrorMessageFields.Login.InvalidInfo, language),
+        ErrorMessageFields.Login.InvalidInfo,
       );
     }
   }
@@ -101,15 +99,15 @@ export class AuthService {
 
     const userInfo = await this.usersRepo.findUserByUsername(username);
 
-    if (!userInfo || !userInfo.isActive || userInfo.isDeleted) {
+    if (!userInfo || !userInfo.isActive) {
       this.logger.error(`Username ${username} not found or not active`);
 
       throw new UnauthorizedException(
-        MessageUtils.CreateMessage(ErrorMessageFields.Login.InvalidInfo, 'en'),
+        ErrorMessageFields.Login.InvalidInfo,
       );
     }
 
-    await this.validatePassword(password, userInfo, 'en');
+    await this.validatePassword(password, userInfo);
 
     return { userInfo };
   }

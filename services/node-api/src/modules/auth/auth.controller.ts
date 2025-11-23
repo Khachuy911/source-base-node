@@ -21,7 +21,7 @@ export class AuthController {
     return this.authService.login(req, body);
   }
 
-  @Auth([{ roles: ['ADMIN'] }])
+  // @Auth([{ roles: ['ADMIN'] }])
   @Post('register')
   register(@Body() body: RegisterBodyDto) {
     return this.authService.register(body);
